@@ -1,1 +1,2 @@
-export { generateAccessToken } from "./generate";
+export { generateAccessToken, generateRefreshToken } from "./generate";
+export { sendRefreshToken } from "./sendRefreshToken";

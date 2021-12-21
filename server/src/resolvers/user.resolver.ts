@@ -1,9 +1,14 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 import { AuthDefaultResponse } from "../utils/responses";
 import { RegisterInput, LoginInput } from "../utils/inputs";
 import { User } from "../entity/User";
 import { hash, compare } from "bcrypt";
-import { generateAccessToken } from "../utils/token";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  sendRefreshToken,
+} from "../utils/token";
+import { IContext } from "../utils/types/Context";
 
 @Resolver()
 export class UserResolver {
@@ -13,7 +18,10 @@ export class UserResolver {
   }
 
   @Mutation(() => AuthDefaultResponse)
-  async login(@Arg("data") data: LoginInput): Promise<AuthDefaultResponse> {
+  async login(
+    @Arg("data") data: LoginInput,
+    @Ctx() { res }: IContext
+  ): Promise<AuthDefaultResponse> {
     if (!data.email || !data.password)
       return {
         status: false,
@@ -35,6 +43,8 @@ export class UserResolver {
       };
     }
 
+    // send refresh token as cookie
+    sendRefreshToken(res, generateRefreshToken(user));
     return {
       status: true,
       message: "Login successfuly",
@@ -44,7 +54,8 @@ export class UserResolver {
 
   @Mutation(() => AuthDefaultResponse)
   async register(
-    @Arg("data") data: RegisterInput
+    @Arg("data") data: RegisterInput,
+    @Ctx() { res }: IContext
   ): Promise<AuthDefaultResponse> {
     if (!data.name || !data.email || !data.password) {
       return {
@@ -59,6 +70,8 @@ export class UserResolver {
       user.email = data.email;
       user.password = await hash(data.password, 5);
       await user.save();
+      // send refresh token as cookie
+      sendRefreshToken(res, generateRefreshToken(user));
       return {
         status: true,
         message: "User created successfuly !",
