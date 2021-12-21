@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
 import { AuthDefaultResponse } from "../utils/responses";
-import { RegisterInput } from "../utils/inputs";
+import { RegisterInput, LoginInput } from "../utils/inputs";
 import { User } from "../entity/User";
-import { hash } from "bcrypt";
+import { hash, compare } from "bcrypt";
 import { generateAccessToken } from "../utils/token";
 
 @Resolver()
@@ -10,6 +10,36 @@ export class UserResolver {
   @Query(() => String)
   ping() {
     return "pong";
+  }
+
+  @Mutation(() => AuthDefaultResponse)
+  async login(@Arg("data") data: LoginInput): Promise<AuthDefaultResponse> {
+    if (!data.email || !data.password)
+      return {
+        status: false,
+        message: "Invalid Data !",
+      };
+
+    const user = await User.findOne({ where: { email: data.email } });
+    if (!user) {
+      return {
+        status: false,
+        message: "User not found !",
+      };
+    }
+    const valid = await compare(data.password, user.password);
+    if (!valid) {
+      return {
+        status: false,
+        message: "Wrong password !",
+      };
+    }
+
+    return {
+      status: true,
+      message: "Login successfuly",
+      token: generateAccessToken(user),
+    };
   }
 
   @Mutation(() => AuthDefaultResponse)
