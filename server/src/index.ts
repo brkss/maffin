@@ -5,10 +5,13 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers";
 import { createConnection } from "typeorm";
+import cookieParser from "cookie-parser";
 
 (async () => {
   await createConnection();
   const app = express();
+
+  app.use(cookieParser());
 
   app.get("/", (_, res) => {
     res.send("hello from express !");
