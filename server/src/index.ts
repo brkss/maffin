@@ -19,6 +19,7 @@ import { createConnection } from "typeorm";
       resolvers: [UserResolver],
       validate: false,
     }),
+    context: ({ req, res }) => ({ req, res }),
   });
 
   apolloServer.applyMiddleware({ app });
