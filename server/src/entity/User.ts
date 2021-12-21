@@ -28,4 +28,8 @@ export class User extends BaseEntity {
   @Field()
   @CreateDateColumn()
   created_at: Date;
+
+  @Field()
+  @Column({ default: 1 })
+  version: number;
 }

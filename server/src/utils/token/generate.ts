@@ -15,3 +15,20 @@ export const generateAccessToken = (user: User) => {
 
   return _token;
 };
+
+export const generateRefreshToken = (user: User) => {
+  if (!user) return "";
+
+  const _token = sign(
+    {
+      userID: user.id,
+      version: user.version,
+    },
+    process.env.REFRESH_SECRET!,
+    {
+      expiresIn: "7d",
+    }
+  );
+
+  return _token;
+};
