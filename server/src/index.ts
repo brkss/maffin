@@ -7,6 +7,7 @@ import { UserResolver } from "./resolvers";
 import { createConnection } from "typeorm";
 
 (async () => {
+  //console.log("secret ", process.env.ACCESS_SECRET);
   await createConnection();
   const app = express();
 
