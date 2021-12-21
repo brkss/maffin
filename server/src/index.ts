@@ -4,8 +4,10 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers";
+import { createConnection } from "typeorm";
 
 (async () => {
+  await createConnection();
   const app = express();
 
   app.get("/", (_, res) => {
