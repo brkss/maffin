@@ -7,10 +7,17 @@ import { UserResolver } from "./resolvers";
 import { createConnection } from "typeorm";
 import cookieParser from "cookie-parser";
 import { refreshToken } from "./utils/token";
+import cors from "cors";
 
 (async () => {
   await createConnection();
   const app = express();
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
   app.use(cookieParser());
 
@@ -28,7 +35,7 @@ import { refreshToken } from "./utils/token";
     context: ({ req, res }) => ({ req, res }),
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(process.env.PORT!, () => {
     console.log(`🚀 server runing http://localhost:${process.env.PORT}`);
