@@ -6,6 +6,7 @@ import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers";
 import { createConnection } from "typeorm";
 import cookieParser from "cookie-parser";
+import { refreshToken } from "./utils/token";
 
 (async () => {
   await createConnection();
@@ -16,6 +17,8 @@ import cookieParser from "cookie-parser";
   app.get("/", (_, res) => {
     res.send("hello from express !");
   });
+
+  app.post("/refresh_token", async (req, res) => await refreshToken(res, req));
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
