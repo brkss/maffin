@@ -2,12 +2,14 @@ import React from "react";
 import { Box, Center, Input, Button, Heading } from "@chakra-ui/react";
 import { useLoginMutation } from "../../generated/graphql";
 import { Error } from "../../components";
-import { setAccessToken } from "../../utils/token/token";
+import { setAccessToken, getAccessToken } from "../../utils/token/token";
+import { useHistory } from "react-router-dom";
 
 export const Login: React.FC = () => {
   const [login] = useLoginMutation();
   const [error, SetError] = React.useState("");
   const [form, SetForm] = React.useState<any>({});
+  const history = useHistory();
 
   const handleForm = (e: React.FormEvent<HTMLInputElement>) => {
     SetForm({
@@ -35,9 +37,12 @@ export const Login: React.FC = () => {
       } else if (res.data.login.token) {
         console.log("TOKEN set successfuly !");
         setAccessToken(res.data.login.token);
+        history.push("/dash");
       }
     });
   };
+
+  if (getAccessToken()) history.push("/dash");
 
   return (
     <Box h={"100vh"}>

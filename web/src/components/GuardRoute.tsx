@@ -8,7 +8,10 @@ interface Props {
 }
 
 export const GuardRoute: React.FC<Props> = ({ route }) => {
-  if (!getAccessToken()) return <Redirect to={"/login"} />;
+  if (!getAccessToken()) {
+    console.log("access token => ", getAccessToken());
+    return <Redirect to={"/login"} />;
+  }
 
   return (
     <Route
