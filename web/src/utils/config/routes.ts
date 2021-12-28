@@ -1,5 +1,5 @@
 import { IRoute } from "../types/Route";
-import { Home, Login } from "../../pages";
+import { Home, Login, Dashboard } from "../../pages";
 
 export const routes: IRoute[] = [
   {
@@ -13,5 +13,16 @@ export const routes: IRoute[] = [
     path: "/login",
     exact: true,
     component: Login,
+  },
+
+  /*
+   * DASHBOARD
+   */
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+    exact: true,
+    component: Dashboard,
+    protected: true,
   },
 ];

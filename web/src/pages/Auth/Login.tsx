@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Center, Input, Button, Heading } from "@chakra-ui/react";
 import { useLoginMutation } from "../../generated/graphql";
 import { Error } from "../../components";
+import { setAccessToken } from "../../utils/token/token";
 
 export const Login: React.FC = () => {
   const [login] = useLoginMutation();
@@ -31,6 +32,9 @@ export const Login: React.FC = () => {
         SetError("Somethin g went wrong !");
       } else if (!res.data.login.status) {
         SetError(res.data.login.message as string);
+      } else if (res.data.login.token) {
+        console.log("TOKEN set successfuly !");
+        setAccessToken(res.data.login.token);
       }
     });
   };
