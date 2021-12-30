@@ -5,6 +5,7 @@ import {
   createResetPasswordToken,
   verifyPasswordToken,
 } from "../../utils/token";
+import { ResetPasswordInput } from "../../utils/inputs/auth/resetpassword.input";
 
 @Resolver()
 export class SecurityResolver {
@@ -14,7 +15,7 @@ export class SecurityResolver {
   }
 
   @Mutation(() => AuthDefaultResponse)
-  async resetPassword(
+  async requestResetPassword(
     @Arg("email") email: string
   ): Promise<AuthDefaultResponse> {
     if (!email) {
@@ -42,6 +43,30 @@ export class SecurityResolver {
       };
     } catch (e) {
       console.log("Something went wrong ! => ", e);
+      return {
+        status: false,
+        message: "Something went wrong !",
+      };
+    }
+  }
+
+  @Mutation(() => AuthDefaultResponse)
+  async resetPassword(
+    @Arg("data") data: ResetPasswordInput
+  ): Promise<AuthDefaultResponse> {
+    if (!data.oldPassword || !data.newPassword || !data.token) {
+      return {
+        status: false,
+        message: "Invalid Data !",
+      };
+    }
+
+    try {
+    } catch (e) {
+      console.log(
+        "Something went wrong trying to reset this user password !",
+        e
+      );
       return {
         status: false,
         message: "Something went wrong !",
