@@ -34,6 +34,7 @@ export type Mutation = {
   register: AuthDefaultResponse;
   requestResetPassword: AuthDefaultResponse;
   resetPassword: AuthDefaultResponse;
+  verifyResetToken: Scalars['Boolean'];
 };
 
 
@@ -54,6 +55,11 @@ export type MutationRequestResetPasswordArgs = {
 
 export type MutationResetPasswordArgs = {
   data: ResetPasswordInput;
+};
+
+
+export type MutationVerifyResetTokenArgs = {
+  token: Scalars['String'];
 };
 
 export type Query = {
@@ -92,6 +98,13 @@ export type RequestResetPasswordMutationVariables = Exact<{
 
 
 export type RequestResetPasswordMutation = { __typename?: 'Mutation', requestResetPassword: { __typename?: 'AuthDefaultResponse', status: boolean, message?: string | null | undefined, token?: string | null | undefined } };
+
+export type VerifyResetTokenMutationVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type VerifyResetTokenMutation = { __typename?: 'Mutation', verifyResetToken: boolean };
 
 export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -202,6 +215,37 @@ export function useRequestResetPasswordMutation(baseOptions?: Apollo.MutationHoo
 export type RequestResetPasswordMutationHookResult = ReturnType<typeof useRequestResetPasswordMutation>;
 export type RequestResetPasswordMutationResult = Apollo.MutationResult<RequestResetPasswordMutation>;
 export type RequestResetPasswordMutationOptions = Apollo.BaseMutationOptions<RequestResetPasswordMutation, RequestResetPasswordMutationVariables>;
+export const VerifyResetTokenDocument = gql`
+    mutation VerifyResetToken($token: String!) {
+  verifyResetToken(token: $token)
+}
+    `;
+export type VerifyResetTokenMutationFn = Apollo.MutationFunction<VerifyResetTokenMutation, VerifyResetTokenMutationVariables>;
+
+/**
+ * __useVerifyResetTokenMutation__
+ *
+ * To run a mutation, you first call `useVerifyResetTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyResetTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyResetTokenMutation, { data, loading, error }] = useVerifyResetTokenMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useVerifyResetTokenMutation(baseOptions?: Apollo.MutationHookOptions<VerifyResetTokenMutation, VerifyResetTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyResetTokenMutation, VerifyResetTokenMutationVariables>(VerifyResetTokenDocument, options);
+      }
+export type VerifyResetTokenMutationHookResult = ReturnType<typeof useVerifyResetTokenMutation>;
+export type VerifyResetTokenMutationResult = Apollo.MutationResult<VerifyResetTokenMutation>;
+export type VerifyResetTokenMutationOptions = Apollo.BaseMutationOptions<VerifyResetTokenMutation, VerifyResetTokenMutationVariables>;
 export const PingDocument = gql`
     query Ping {
   ping
