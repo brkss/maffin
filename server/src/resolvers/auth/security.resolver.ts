@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Arg } from "type-graphql";
+import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
 import { AuthDefaultResponse } from "../../utils/responses";
 import { User } from "../../entity/User";
 import {
@@ -6,6 +6,12 @@ import {
   verifyPasswordToken,
 } from "../../utils/token";
 import { ResetPasswordInput } from "../../utils/inputs/auth/resetpassword.input";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+  sendRefreshToken,
+} from "../../utils/token";
+import { IContext } from "../../utils/types/Context";
 
 @Resolver()
 export class SecurityResolver {
@@ -52,9 +58,10 @@ export class SecurityResolver {
 
   @Mutation(() => AuthDefaultResponse)
   async resetPassword(
-    @Arg("data") data: ResetPasswordInput
+    @Arg("data") data: ResetPasswordInput,
+    @Ctx() ctx: IContext
   ): Promise<AuthDefaultResponse> {
-    if (!data.oldPassword || !data.newPassword || !data.token) {
+    if (!data.newPassword || !data.token) {
       return {
         status: false,
         message: "Invalid Data !",
@@ -62,6 +69,27 @@ export class SecurityResolver {
     }
 
     try {
+      const vrf = await verifyPasswordToken(data.token);
+
+      if (!vrf.status) {
+        return {
+          status: false,
+          message: "Invalid token !",
+        };
+      }
+      const user = vrf.user;
+      if (!user) {
+        return {
+          status: false,
+          message: "User not found !",
+        };
+      }
+
+      sendRefreshToken(ctx.res, generateRefreshToken(user));
+      return {
+        status: true,
+        token: generateAccessToken(user),
+      };
     } catch (e) {
       console.log(
         "Something went wrong trying to reset this user password !",
