@@ -22,6 +22,16 @@ export class SecurityResolver {
     return "yes !";
   }
 
+  @Mutation(() => Boolean)
+  async verifyResetToken(@Arg("token") token: string) {
+    if (!token) {
+      return false;
+    }
+    const vrf = await verifyPasswordToken(token);
+    if (!vrf.status) return false;
+    return true;
+  }
+
   @Mutation(() => AuthDefaultResponse)
   async requestResetPassword(
     @Arg("email") email: string
