@@ -10,6 +10,7 @@ import { Spinner, Center } from "@chakra-ui/react";
 import { GuardRoute } from "./components/GuardRoute";
 import { setAccessToken, getAccessToken } from "./utils/token/token";
 import { URI } from "./utils/config/defaults";
+import { TopNavigation } from "./components";
 
 export const Application: React.FC = () => {
   const [loading, SetLoading] = React.useState(true);
@@ -40,6 +41,7 @@ export const Application: React.FC = () => {
   return (
     <>
       <BrowserRouter>
+        {getAccessToken() ? <TopNavigation /> : null}
         <Switch>
           {routes.map((route, key) =>
             route.protected ? (
