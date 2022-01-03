@@ -3,9 +3,11 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   Column,
+  OneToMany,
   CreateDateColumn,
 } from "typeorm";
 import { ObjectType, Field } from "type-graphql";
+import { ResetPassword } from "./ResetPassword";
 
 @ObjectType()
 @Entity("users")
@@ -32,4 +34,7 @@ export class User extends BaseEntity {
   @Field()
   @Column({ default: 1 })
   version: number;
+
+  @OneToMany(() => ResetPassword, (resetpasswords) => resetpasswords.user)
+  resetpasswords: ResetPassword[];
 }

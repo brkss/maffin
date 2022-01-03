@@ -13,6 +13,7 @@ import {
 } from "../../utils/token";
 import { IContext } from "../../utils/types/Context";
 import { hash } from "bcrypt";
+import { ResetPassword } from "../../entity/ResetPassword";
 
 @Resolver()
 export class SecurityResolver {
@@ -40,7 +41,10 @@ export class SecurityResolver {
           message: "Invalid Email !",
         };
       }
-      const _token = createResetPasswordToken(user);
+      const resetRecord = new ResetPassword();
+      resetRecord.user = user;
+      await resetRecord.save();
+      const _token = createResetPasswordToken(user, resetRecord);
       // you must not send token as response the token should be sent in email !
       // this is only for test reasons
       return {
@@ -79,7 +83,8 @@ export class SecurityResolver {
         };
       }
       const user = vrf.user;
-      if (!user) {
+      const record = vrf.record;
+      if (!user || !record) {
         return {
           status: false,
           message: "User not found !",
@@ -89,6 +94,9 @@ export class SecurityResolver {
       user.version = user.version + 1;
       user.password = await hash(data.newPassword, 5);
       await user.save();
+
+      record.expired = true;
+      await record.save();
 
       sendRefreshToken(ctx.res, generateRefreshToken(user));
       return {

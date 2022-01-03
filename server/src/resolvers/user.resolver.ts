@@ -100,4 +100,13 @@ export class UserResolver {
       };
     }
   }
+
+  @UseMiddleware(isUserAuth)
+  @Mutation(() => AuthDefaultResponse)
+  async logout(@Ctx() ctx: IContext) {
+    ctx.res.clearCookie("uid");
+    return {
+      status: true,
+    };
+  }
 }

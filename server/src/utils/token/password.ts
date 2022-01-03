@@ -1,10 +1,15 @@
 import { sign, verify } from "jsonwebtoken";
 import { User } from "../../entity/User";
+import { ResetPassword } from "../../entity/ResetPassword";
 
-export const createResetPasswordToken = (user: User): string => {
+export const createResetPasswordToken = (
+  user: User,
+  record: ResetPassword
+): string => {
   const _token = sign(
     {
       userID: user.id,
+      record: record.id,
     },
     process.env.PASSWORD_SECRET!,
     {
@@ -18,6 +23,7 @@ export const createResetPasswordToken = (user: User): string => {
 interface IVerifyPasswordTokenResponse {
   status: boolean;
   user?: User;
+  record?: ResetPassword;
 }
 
 export const verifyPasswordToken = async (
@@ -41,8 +47,15 @@ export const verifyPasswordToken = async (
   }
 
   console.log("password token payload => ", payload);
+  const record = await ResetPassword.findOne({ where: { id: payload.record } });
+  if (!record || record.expired) {
+    return {
+      status: false,
+    };
+  }
   return {
     status: true,
     user: await User.findOne({ where: { id: payload.userID } }),
+    record: record,
   };
 };
