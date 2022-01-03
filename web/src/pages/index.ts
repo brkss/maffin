@@ -1,3 +1,3 @@
 export { Home } from "./Home";
-export { Login } from "./Auth";
+export { Login, ForgetPassword } from "./Auth";
 export { Dashboard } from "./Dash";

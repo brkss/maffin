@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Center, Input, Button, Heading } from "@chakra-ui/react";
+import { Box, Center, Input, Button, Heading, Link } from "@chakra-ui/react";
 import { useLoginMutation } from "../../generated/graphql";
 import { Error } from "../../components";
 import { setAccessToken, getAccessToken } from "../../utils/token/token";
@@ -66,6 +66,11 @@ export const Login: React.FC = () => {
             id="password"
             onChange={(e) => handleForm(e)}
           />
+          <Box m={"2px 0 10px"}>
+            <Link onClick={() => history.push("/forget-password")}>
+              Forget your password ?
+            </Link>
+          </Box>
           <Button onClick={handleLogin} variant={"solid"}>
             {" "}
             Login{" "}
