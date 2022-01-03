@@ -1,5 +1,11 @@
 import { IRoute } from "../types/Route";
-import { Home, Login, Dashboard, ForgetPassword } from "../../pages";
+import {
+  Home,
+  Login,
+  Dashboard,
+  ForgetPassword,
+  ResetPassword,
+} from "../../pages";
 
 export const routes: IRoute[] = [
   {
@@ -19,6 +25,12 @@ export const routes: IRoute[] = [
     path: "/forget-password",
     exact: true,
     component: ForgetPassword,
+  },
+  {
+    name: "Reset Password",
+    path: "/reset-password/:token",
+    exact: true,
+    component: ResetPassword,
   },
   /*
    * DASHBOARD
