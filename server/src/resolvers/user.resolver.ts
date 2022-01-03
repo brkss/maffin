@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Arg, Ctx } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  Ctx,
+  UseMiddleware,
+} from "type-graphql";
 import { AuthDefaultResponse } from "../utils/responses";
 import { RegisterInput, LoginInput } from "../utils/inputs";
 import { User } from "../entity/User";
@@ -9,9 +16,11 @@ import {
   sendRefreshToken,
 } from "../utils/token";
 import { IContext } from "../utils/types/Context";
+import { isUserAuth } from "../utils/middlewares";
 
 @Resolver()
 export class UserResolver {
+  @UseMiddleware(isUserAuth)
   @Query(() => String)
   ping() {
     return "pong";

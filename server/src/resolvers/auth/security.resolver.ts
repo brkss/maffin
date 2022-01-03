@@ -12,6 +12,7 @@ import {
   sendRefreshToken,
 } from "../../utils/token";
 import { IContext } from "../../utils/types/Context";
+import { hash } from "bcrypt";
 
 @Resolver()
 export class SecurityResolver {
@@ -84,6 +85,10 @@ export class SecurityResolver {
           message: "User not found !",
         };
       }
+
+      user.version = user.version + 1;
+      user.password = await hash(data.newPassword, 5);
+      await user.save();
 
       sendRefreshToken(ctx.res, generateRefreshToken(user));
       return {
