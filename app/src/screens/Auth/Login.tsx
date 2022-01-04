@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 //import { Input } from "../..";
 import { Input, Center, Heading, Container, Button } from "native-base";
+import { usePingQuery } from "../../generated/graphql";
 
 export const Login: React.FC = () => {
   const [form, SetForm] = React.useState({
@@ -20,10 +21,11 @@ export const Login: React.FC = () => {
   const handleLogin = () => {
     console.log("form : ", form);
   };
+
   return (
     <Center w={"100%"} flex={1}>
       <Container w={"100%"}>
-        <Heading mb={"10px"}>Login</Heading>
+        <Heading mb={"10px"}>Login </Heading>
         <Input
           value={form.email}
           w={"100%"}
