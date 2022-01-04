@@ -20,7 +20,6 @@ import { isUserAuth } from "../utils/middlewares";
 
 @Resolver()
 export class UserResolver {
-  @UseMiddleware(isUserAuth)
   @Query(() => String)
   ping() {
     return "pong";
