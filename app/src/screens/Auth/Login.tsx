@@ -2,16 +2,19 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 //import { Input } from "../..";
 import { Input, Center, Heading, Container, Button } from "native-base";
-import { usePingQuery } from "../../generated/graphql";
+import { useLoginMutation } from "../../generated/graphql";
+import { setAccessToken } from "../../utils";
 
 export const Login: React.FC = () => {
+  const [login] = useLoginMutation();
+  const [loading, SetLoading] = React.useState(false);
+  const [error, SetError] = React.useState("");
   const [form, SetForm] = React.useState({
     email: "",
     password: "",
   });
 
   const handleForm = (val: string, key: string) => {
-    console.log("val : ", val);
     SetForm({
       ...form,
       [key]: val,
@@ -19,7 +22,32 @@ export const Login: React.FC = () => {
   };
 
   const handleLogin = () => {
-    console.log("form : ", form);
+    if (!form.email || !form.password) {
+      // error : missing data !
+      SetError("Missing Fields");
+      return;
+    }
+    SetError("");
+    SetLoading(true);
+    login({
+      variables: {
+        email: form.email,
+        password: form.password,
+      },
+    }).then((res) => {
+      SetLoading(false);
+      if (!res || !res.data || res.errors) {
+        // error
+        SetError("Somnething went wrong !");
+      } else if (!res.data.login.status) {
+        SetError(res.data.login.message || "Somnething went wrong");
+      } else if (res.data.login.status && res.data.login.token) {
+        // login successfuly !!
+        const _token = res.data.login.token;
+        setAccessToken(_token);
+      }
+      console.log("Login Response => ", res);
+    });
   };
 
   return (
@@ -48,6 +76,7 @@ export const Login: React.FC = () => {
           onPress={() => handleLogin()}
           colorScheme="dark"
           mt={"10px"}
+          isLoading={loading}
           variant={"subtle"}
         >
           Login
