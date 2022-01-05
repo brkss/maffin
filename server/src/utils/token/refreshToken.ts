@@ -4,7 +4,8 @@ import { User } from "../../entity/User";
 import { sendRefreshToken, generateAccessToken, generateRefreshToken } from ".";
 
 export const refreshToken = async (res: Response, req: Request) => {
-  const _token = req.cookies.uid;
+  const _token = req.cookies.uid || req.headers["r-token"];
+
   if (!_token) {
     return res.send({
       status: false,
