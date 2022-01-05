@@ -31,17 +31,6 @@ export const MainNavigation: React.FC = () => {
             setAccessToken(data.token);
             login(data.token);
           }
-
-          console.log("fetch accesstoken resp => ", await res.json());
-
-          /*
-            .then((res) => {
-              console.log("REFRESH TOKEN RES => ", res);
-            })
-            .catch((e) => {
-              console.log("Something went wrong refreshing token ! ", e);
-            });
-          */
         }
         SetLoading(false);
       })
