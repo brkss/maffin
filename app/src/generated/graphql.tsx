@@ -18,6 +18,7 @@ export type Scalars = {
 export type AuthDefaultResponse = {
   __typename?: 'AuthDefaultResponse';
   message?: Maybe<Scalars['String']>;
+  rToken?: Maybe<Scalars['String']>;
   status: Scalars['Boolean'];
   token?: Maybe<Scalars['String']>;
 };
@@ -85,7 +86,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthDefaultResponse', status: boolean, message?: string | null | undefined, token?: string | null | undefined } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthDefaultResponse', status: boolean, message?: string | null | undefined, token?: string | null | undefined, rToken?: string | null | undefined } };
 
 export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -99,6 +100,7 @@ export const LoginDocument = gql`
     status
     message
     token
+    rToken
   }
 }
     `;

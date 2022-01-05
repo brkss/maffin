@@ -11,6 +11,7 @@ import { getAccessToken, setAccessToken, URI } from "./src/utils";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
 import { AuthProvider } from "./src/utils/auth/AuthProvider";
+import * as SecureStore from "expo-secure-store";
 
 const cache = new InMemoryCache({});
 
@@ -59,10 +60,12 @@ const link: any = new TokenRefreshLink({
       return false;
     }
   },
-  fetchAccessToken: () => {
+  fetchAccessToken: async () => {
     return fetch(`${URI}/refresh_token`, {
       method: "POST",
-      credentials: "include",
+      headers: new Headers({
+        "r-token": (await SecureStore.getItemAsync("TOKEN")) || "",
+      }),
     });
   },
   handleFetch: (accessToken) => {

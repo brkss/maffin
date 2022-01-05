@@ -4,5 +4,6 @@ mutation Login($email: String!, $password: String!){
     status
     message
     token
+    rToken
   }
 }

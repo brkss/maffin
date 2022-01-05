@@ -4,6 +4,7 @@ import { Input, Center, Heading, Container, Button } from "native-base";
 import { useLoginMutation } from "../../generated/graphql";
 import { setAccessToken } from "../../utils";
 import { AuthContext } from "../../utils/auth/AuthProvider";
+import * as SecureStore from "expo-secure-store";
 
 export const Login: React.FC<any> = ({ navigation }) => {
   const _ctx = React.useContext(AuthContext);
@@ -22,7 +23,7 @@ export const Login: React.FC<any> = ({ navigation }) => {
     });
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!form.email || !form.password) {
       // error : missing data !
       SetError("Missing Fields");
@@ -35,21 +36,29 @@ export const Login: React.FC<any> = ({ navigation }) => {
         email: form.email,
         password: form.password,
       },
-    }).then((res) => {
+    }).then(async (res) => {
       SetLoading(false);
       if (!res || !res.data || res.errors) {
         // error
         SetError("Somnething went wrong !");
       } else if (!res.data.login.status) {
         SetError(res.data.login.message || "Somnething went wrong");
-      } else if (res.data.login.status && res.data.login.token) {
+      } else if (
+        res.data.login.status &&
+        res.data.login.token &&
+        res.data.login.rToken
+      ) {
         // login successfuly !!
         const _token = res.data.login.token;
+        const _refreshToken = res.data.login.rToken;
+        await SecureStore.setItemAsync("TOKEN", _refreshToken);
         setAccessToken(_token);
         _ctx.login(_token);
-        console.log("SETUP TOKEN IN CONTEXT => ", _ctx.token);
+        console.log(
+          "refresh token : ",
+          await SecureStore.getItemAsync("TOKEN")
+        );
       }
-      console.log("Login Response => ", res);
     });
   };
 
