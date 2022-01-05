@@ -52,11 +52,14 @@ export class UserResolver {
     }
 
     // send refresh token as cookie
-    sendRefreshToken(res, generateRefreshToken(user));
+    const refreshToken = generateRefreshToken(user);
+    sendRefreshToken(res, refreshToken);
     return {
       status: true,
       message: "Login successfuly",
       token: generateAccessToken(user),
+      // send refresh token here is temporary solution for react native !
+      rToken: refreshToken,
     };
   }
 
@@ -79,11 +82,14 @@ export class UserResolver {
       user.password = await hash(data.password, 5);
       await user.save();
       // send refresh token as cookie
-      sendRefreshToken(res, generateRefreshToken(user));
+      const refreshToken = generateRefreshToken(user);
+      sendRefreshToken(res, refreshToken);
       return {
         status: true,
         message: "User created successfuly !",
         token: generateAccessToken(user),
+        // sending refresh token here is temporary solution for react native !
+        rToken: refreshToken,
       };
     } catch (e) {
       console.log("something went wrong ! ", e);

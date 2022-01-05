@@ -10,4 +10,7 @@ export class AuthDefaultResponse {
 
   @Field({ nullable: true })
   token?: string;
+
+  @Field({ nullable: true })
+  rToken?: string;
 }
