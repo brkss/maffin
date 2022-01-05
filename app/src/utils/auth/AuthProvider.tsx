@@ -1,16 +1,17 @@
 import React, { Children } from "react";
 import { getAccessToken } from "../token/token";
+import * as SecureStore from "expo-secure-store";
 
 type IToken = null | string;
 
 export const AuthContext = React.createContext<{
   token: IToken;
   login: (_token: string) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 }>({
   token: null,
   login: () => {},
-  logout: () => {},
+  logout: async () => {},
 });
 
 export const AuthProvider: React.FC = ({ children }) => {
@@ -24,8 +25,9 @@ export const AuthProvider: React.FC = ({ children }) => {
           SetToken(_token);
           console.log("SETUP TOKEN ON CONTEXT !");
         },
-        logout: () => {
+        logout: async () => {
           SetToken(null);
+          await SecureStore.deleteItemAsync("TOKEN");
         },
       }}
     >
