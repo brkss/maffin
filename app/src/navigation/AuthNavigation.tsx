@@ -1,14 +1,15 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home, Splash } from "../screens";
+import { Login, Splash } from "../screens";
 
-export const AppNavigation: React.FC = () => {
+export const AuthNavigation: React.FC = () => {
   const { Group, Screen, Navigator } = createStackNavigator();
 
   return (
     <Navigator screenOptions={{ headerShown: false }}>
       <Group>
-        <Screen name={"home"} component={Home} />
+        <Screen name={"login"} component={Login} />
+        <Screen name={"splash"} component={Splash} />
       </Group>
     </Navigator>
   );

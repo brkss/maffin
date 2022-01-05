@@ -10,6 +10,7 @@ import { ApolloLink, Observable } from "apollo-link";
 import { getAccessToken, setAccessToken, URI } from "./src/utils";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
+import { AuthProvider } from "./src/utils/auth/AuthProvider";
 
 const cache = new InMemoryCache({});
 
@@ -92,9 +93,11 @@ const client: any = new ApolloClient({
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <NativeBaseProvider>
-        <MainNavigation />
-      </NativeBaseProvider>
+      <AuthProvider>
+        <NativeBaseProvider>
+          <MainNavigation />
+        </NativeBaseProvider>
+      </AuthProvider>
     </ApolloProvider>
   );
 }

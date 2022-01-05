@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-//import { Input } from "../..";
 import { Input, Center, Heading, Container, Button } from "native-base";
 import { useLoginMutation } from "../../generated/graphql";
 import { setAccessToken } from "../../utils";
+import { AuthContext } from "../../utils/auth/AuthProvider";
 
-export const Login: React.FC = () => {
+export const Login: React.FC<any> = ({ navigation }) => {
+  const _ctx = React.useContext(AuthContext);
   const [login] = useLoginMutation();
   const [loading, SetLoading] = React.useState(false);
   const [error, SetError] = React.useState("");
@@ -45,6 +46,8 @@ export const Login: React.FC = () => {
         // login successfuly !!
         const _token = res.data.login.token;
         setAccessToken(_token);
+        _ctx.login(_token);
+        console.log("SETUP TOKEN IN CONTEXT => ", _ctx.token);
       }
       console.log("Login Response => ", res);
     });
