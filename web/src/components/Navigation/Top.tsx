@@ -10,7 +10,7 @@ export const TopNavigation: React.FC = () => {
 
   const handleLogout = () => {
     logout().then((res) => {
-      if (res && res.data!.logout.status == true) {
+      if (res && res.data!.logout.status) {
         setAccessToken("");
         history.push("/login");
       }
