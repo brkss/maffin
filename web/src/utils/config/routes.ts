@@ -5,6 +5,7 @@ import {
   Dashboard,
   ForgetPassword,
   ResetPassword,
+  Checkout,
 } from "../../pages";
 
 export const routes: IRoute[] = [
@@ -36,10 +37,24 @@ export const routes: IRoute[] = [
    * DASHBOARD
    */
   {
+    name: "Checkout",
+    path: "/checkout",
+    exact: true,
+    component: Checkout,
+    protected: true,
+  },
+  {
     name: "Dashboard",
     path: "/dashboard",
     exact: true,
     component: Dashboard,
+    protected: true,
+  },
+  {
+    name: "Checkout",
+    path: "/checkout",
+    exact: true,
+    component: Checkout,
     protected: true,
   },
 ];

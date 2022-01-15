@@ -14,6 +14,13 @@ import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
 import { URI } from "./utils/config/defaults";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripe = loadStripe(
+  "pk_test_51HwGWqK4LvsOZgEE6TysO7wjCiZl8zOnUnfpVANkreQogcu4F5svZmupJGggcAPiTava2A2co3HRpH9sIRgsa28600gUMYVZdc"
+);
+
 const cache = new InMemoryCache({});
 
 const requestLink = new ApolloLink(
@@ -95,9 +102,11 @@ const client: any = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <ChakraProvider>
-        <Application />
-      </ChakraProvider>
+      <Elements stripe={stripe}>
+        <ChakraProvider>
+          <Application />
+        </ChakraProvider>
+      </Elements>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
