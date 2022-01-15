@@ -17,6 +17,8 @@ import { URI } from "./utils/config/defaults";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
+import "./assets/stripe.css";
+
 const stripe = loadStripe(
   "pk_test_51HwGWqK4LvsOZgEE6TysO7wjCiZl8zOnUnfpVANkreQogcu4F5svZmupJGggcAPiTava2A2co3HRpH9sIRgsa28600gUMYVZdc"
 );
