@@ -50,11 +50,4 @@ export const routes: IRoute[] = [
     component: Dashboard,
     protected: true,
   },
-  {
-    name: "Checkout",
-    path: "/checkout",
-    exact: true,
-    component: Checkout,
-    protected: true,
-  },
 ];

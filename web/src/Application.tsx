@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
   RouteComponentProps,
+  Redirect,
 } from "react-router-dom";
 import { Spinner, Center } from "@chakra-ui/react";
 import { GuardRoute } from "./components/GuardRoute";
@@ -37,7 +38,7 @@ export const Application: React.FC = () => {
         <Spinner />
       </Center>
     );
-
+  // {/*<GuardRoute key={key} route={route} />*/}
   return (
     <>
       <BrowserRouter>
@@ -45,7 +46,22 @@ export const Application: React.FC = () => {
         <Switch>
           {routes.map((route, key) =>
             route.protected ? (
-              <GuardRoute key={key} route={route} />
+              getAccessToken() ? (
+                <Route
+                  key={key}
+                  path={route.path}
+                  exact={route.exact}
+                  render={(props: RouteComponentProps) => (
+                    <route.component
+                      {...route.props}
+                      {...route.name}
+                      {...props}
+                    />
+                  )}
+                />
+              ) : (
+                <Redirect to={"/login"} />
+              )
             ) : (
               <Route
                 key={key}

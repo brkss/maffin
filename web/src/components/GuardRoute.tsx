@@ -17,9 +17,9 @@ export const GuardRoute: React.FC<Props> = ({ route }) => {
     <Route
       path={route.path}
       exact={route.exact}
-      render={(props: RouteComponentProps) => (
-        <route.component {...route.props} {...route.name} {...props} />
-      )}
+      render={(props: RouteComponentProps) => {
+        return <route.component {...route.props} {...route.name} {...props} />;
+      }}
     />
   );
 };
