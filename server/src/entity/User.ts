@@ -20,6 +20,10 @@ export class User extends BaseEntity {
   @Column()
   name: string;
 
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  stripeID: string;
+
   @Field()
   @Column({ unique: true })
   email: string;

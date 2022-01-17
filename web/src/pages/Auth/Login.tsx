@@ -37,7 +37,7 @@ export const Login: React.FC = () => {
       } else if (res.data.login.token) {
         console.log("TOKEN set successfuly !");
         setAccessToken(res.data.login.token);
-        history.push("/dash");
+        history.push("/dashboard");
       }
     });
   };
