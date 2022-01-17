@@ -42,7 +42,7 @@ export const Login: React.FC = () => {
     });
   };
 
-  if (getAccessToken()) history.push("/dash");
+  if (getAccessToken()) history.push("/dashboard");
 
   return (
     <Box h={"100vh"}>

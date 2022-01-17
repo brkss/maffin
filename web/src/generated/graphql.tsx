@@ -18,6 +18,7 @@ export type Scalars = {
 export type AuthDefaultResponse = {
   __typename?: 'AuthDefaultResponse';
   message?: Maybe<Scalars['String']>;
+  rToken?: Maybe<Scalars['String']>;
   status: Scalars['Boolean'];
   token?: Maybe<Scalars['String']>;
 };
@@ -62,9 +63,19 @@ export type MutationVerifyResetTokenArgs = {
   token: Scalars['String'];
 };
 
+export type PricingResponse = {
+  __typename?: 'PricingResponse';
+  amount: Scalars['Float'];
+  currency: Scalars['String'];
+  priceID: Scalars['String'];
+  productID: Scalars['String'];
+  productName: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   ping: Scalars['String'];
+  pricing: Array<PricingResponse>;
   work: Scalars['String'];
 };
 
@@ -118,6 +129,11 @@ export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PingQuery = { __typename?: 'Query', ping: string };
+
+export type PricingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PricingQuery = { __typename?: 'Query', pricing: Array<{ __typename?: 'PricingResponse', priceID: string, amount: number, currency: string, productID: string, productName: string }> };
 
 
 export const LoginDocument = gql`
@@ -322,3 +338,41 @@ export function usePingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PingQ
 export type PingQueryHookResult = ReturnType<typeof usePingQuery>;
 export type PingLazyQueryHookResult = ReturnType<typeof usePingLazyQuery>;
 export type PingQueryResult = Apollo.QueryResult<PingQuery, PingQueryVariables>;
+export const PricingDocument = gql`
+    query Pricing {
+  pricing {
+    priceID
+    amount
+    currency
+    productID
+    productName
+  }
+}
+    `;
+
+/**
+ * __usePricingQuery__
+ *
+ * To run a query within a React component, call `usePricingQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePricingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePricingQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePricingQuery(baseOptions?: Apollo.QueryHookOptions<PricingQuery, PricingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PricingQuery, PricingQueryVariables>(PricingDocument, options);
+      }
+export function usePricingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PricingQuery, PricingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PricingQuery, PricingQueryVariables>(PricingDocument, options);
+        }
+export type PricingQueryHookResult = ReturnType<typeof usePricingQuery>;
+export type PricingLazyQueryHookResult = ReturnType<typeof usePricingLazyQuery>;
+export type PricingQueryResult = Apollo.QueryResult<PricingQuery, PricingQueryVariables>;

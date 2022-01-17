@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Center, Heading, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Heading,
+  Button,
+  SimpleGrid,
+  Text,
+} from "@chakra-ui/react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { PaymentSuccess } from "./Success";
 
@@ -32,6 +39,20 @@ export const Checkout: React.FC = () => {
   return (
     <Center h={"100vh"}>
       <Box w={"300px"}>
+        <SimpleGrid mb={"10px"} columns={2} spacing={7}>
+          <Box cursor={"pointer"} p={"10px"} bg={"#faf2ff"} rounded={"7px"}>
+            <Text fontWeight={"bold"} fontSize={"18px"}>
+              Basic Plan
+            </Text>
+            <Text>29.99 USD</Text>
+          </Box>
+          <Box cursor={"pointer"} p={"10px"} bg={"#faf2ff"} rounded={"7px"}>
+            <Text fontWeight={"bold"} fontSize={"18px"}>
+              Basic Plan
+            </Text>
+            <Text>29.99 USD</Text>
+          </Box>
+        </SimpleGrid>
         <form onSubmit={handleSubmit}>
           <CardElement className={"light"} />
           <Button
