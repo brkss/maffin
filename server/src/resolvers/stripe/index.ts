@@ -1,1 +1,1 @@
-export * from "./princing.resolver";
+export * from "./pricing.resolver";
