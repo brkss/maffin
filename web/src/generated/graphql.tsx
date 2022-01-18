@@ -23,6 +23,11 @@ export type AuthDefaultResponse = {
   token?: Maybe<Scalars['String']>;
 };
 
+export type CreateSubscritionInput = {
+  paymentMethodID: Scalars['String'];
+  priceID: Scalars['String'];
+};
+
 export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -30,12 +35,18 @@ export type LoginInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createSubscription: StripeDefaultResponse;
   login: AuthDefaultResponse;
   logout: AuthDefaultResponse;
   register: AuthDefaultResponse;
   requestResetPassword: AuthDefaultResponse;
   resetPassword: AuthDefaultResponse;
   verifyResetToken: Scalars['Boolean'];
+};
+
+
+export type MutationCreateSubscriptionArgs = {
+  data: CreateSubscritionInput;
 };
 
 
@@ -90,6 +101,12 @@ export type ResetPasswordInput = {
   token: Scalars['String'];
 };
 
+export type StripeDefaultResponse = {
+  __typename?: 'StripeDefaultResponse';
+  message: Scalars['String'];
+  status: Scalars['Boolean'];
+};
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -129,6 +146,14 @@ export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PingQuery = { __typename?: 'Query', ping: string };
+
+export type CreateSubscriptionMutationVariables = Exact<{
+  priceID: Scalars['String'];
+  paymentMethodID: Scalars['String'];
+}>;
+
+
+export type CreateSubscriptionMutation = { __typename?: 'Mutation', createSubscription: { __typename?: 'StripeDefaultResponse', status: boolean, message: string } };
 
 export type PricingQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -338,6 +363,41 @@ export function usePingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PingQ
 export type PingQueryHookResult = ReturnType<typeof usePingQuery>;
 export type PingLazyQueryHookResult = ReturnType<typeof usePingLazyQuery>;
 export type PingQueryResult = Apollo.QueryResult<PingQuery, PingQueryVariables>;
+export const CreateSubscriptionDocument = gql`
+    mutation CreateSubscription($priceID: String!, $paymentMethodID: String!) {
+  createSubscription(data: {priceID: $priceID, paymentMethodID: $paymentMethodID}) {
+    status
+    message
+  }
+}
+    `;
+export type CreateSubscriptionMutationFn = Apollo.MutationFunction<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>;
+
+/**
+ * __useCreateSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useCreateSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSubscriptionMutation, { data, loading, error }] = useCreateSubscriptionMutation({
+ *   variables: {
+ *      priceID: // value for 'priceID'
+ *      paymentMethodID: // value for 'paymentMethodID'
+ *   },
+ * });
+ */
+export function useCreateSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>(CreateSubscriptionDocument, options);
+      }
+export type CreateSubscriptionMutationHookResult = ReturnType<typeof useCreateSubscriptionMutation>;
+export type CreateSubscriptionMutationResult = Apollo.MutationResult<CreateSubscriptionMutation>;
+export type CreateSubscriptionMutationOptions = Apollo.BaseMutationOptions<CreateSubscriptionMutation, CreateSubscriptionMutationVariables>;
 export const PricingDocument = gql`
     query Pricing {
   pricing {
